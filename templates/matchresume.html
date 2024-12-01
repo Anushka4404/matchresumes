@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Matcher</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+        }
+        .container {
+            margin-top: 70px;
+            max-width: 800px;
+        }
+        .card {
+            border-radius: 20px;
+            background: #ffffff;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: -80px;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        .card-header {
+            z-index: 1;
+            position: relative;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card-header h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e3c72;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #2a5298;
+        }
+        .form-control {
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 12px rgba(37, 117, 252, 0.4);
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            border: none;
+            border-radius: 30px;
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
+        }
+        .alert {
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 16px;
+            background: rgba(37, 117, 252, 0.1);
+            color: #2575fc;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .alert ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .alert ul li {
+            margin-bottom: 5px;
+        }
+        small.form-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        /* Additional Media Query for better mobile experience */
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-control {
+                font-size: 13px;
+            }
+
+            .btn-primary {
+                padding: 12px 30px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Job Description and Resume Matcher</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/matcher" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="job_description">Job Description:</label>
+                        <textarea class="form-control" id="job_description" name="job_description" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="resumes">Upload Resumes:</label>
+                        <small class="form-text">Please upload more than 5 resumes in PDF, DOCX, or TXT format.</small>
+                        <input type="file" class="form-control" id="resumes" name="resumes" multiple required accept=".pdf, .docx, .txt">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Match Resumes</button>
+                </form>
+                {% if message %}
+                    <div class="alert alert-info">
+                        <p>{{ message }}</p>
+                        <ul>
+                            {% for index in range(top_resumes|length) %}
+                                <li>{{ top_resumes[index] }} (Similarity Score: {{ similarity_scores[index] }})</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
